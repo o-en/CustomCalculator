@@ -2,6 +2,7 @@ package com.example.calculator
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -10,9 +11,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         var net = 0.0
         var current = ""
         var method = "plus"
+
+
+        result.setOnTouchListener { _: View, event: MotionEvent ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    result.setText("hihi")
+                }
+            }
+
+            when (event.action) {
+                MotionEvent.ACTION_UP -> {
+                    result.setText(net.toString())
+                }
+            }
+
+            true
+        }
 
         ca.setOnClickListener {
             net = 0.0
