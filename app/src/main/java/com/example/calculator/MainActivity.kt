@@ -2,7 +2,7 @@ package com.example.calculator
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -10,19 +10,48 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var sum = 0
+        var net = 0.0
         var current = ""
+        var method = "plus"
 
         ca.setOnClickListener {
-            sum = 0
+            net = 0.0
             current = ""
-            result.setText(sum.toString())
+            method = "plus"
+            result.setText("0")
+        }
+
+        fun calc(it: View) {
+            if (current != "") {
+                if (method == "plus") {
+                    net += current.toDouble()
+                } else if (method == "minus") {
+                    net -= current.toDouble()
+                } else if (method == "multiply") {
+                    net *= current.toDouble()
+                } else if (method == "divide") {
+                    net /= current.toDouble()
+                }
+            }
+            result.setText(net.toString())
+            current = ""
+            var fullName = getResources().getResourceName(it.getId())
+            var name = fullName.substring(fullName.lastIndexOf("/") + 1)
+            method = name
         }
 
         plus.setOnClickListener {
-            sum += current.toInt()
-            result.setText(sum.toString())
-            current = ""
+            calc(it)
+        }
+        minus.setOnClickListener {
+            calc(it)
+        }
+        multiply.setOnClickListener {
+            calc(it)
+        }
+
+        divide.setOnClickListener {
+            calc(it)
         }
 
         one.setOnClickListener {
