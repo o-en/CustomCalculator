@@ -12,15 +12,43 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        var net = 0.0
+        var net = 0
         var current = ""
         var method = "plus"
 
 
+        fun getNumKor(value: String): String {
+            val kor1 = listOf("", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구")
+            val kor2 = listOf("", "십", "백", "천")
+            val kor3 = listOf("", "만", "억", "조", "경")
+
+            val strVal = value.toString()
+            val strLen = strVal.length
+            var strRet = ""
+            var nowInt = 0
+
+            strVal.forEachIndexed { index, c ->
+                var nowInt = Character.getNumericValue(value.get(strLen - index - 1))
+
+                var now = ""
+                if (nowInt > 0) {
+                    now = now + kor1[nowInt] + kor2[index % 4]
+                }
+
+                if (index % 4 == 0) {
+                    now = now + kor3[index / 4]
+                }
+                strRet = now + strRet
+            }
+
+            return strRet
+
+        }
+
         result.setOnTouchListener { _: View, event: MotionEvent ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    result.setText("hihi")
+                    result.setText(getNumKor(result.text.toString()))
                 }
             }
 
@@ -33,23 +61,16 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        ca.setOnClickListener {
-            net = 0.0
-            current = ""
-            method = "plus"
-            result.setText("0")
-        }
-
         fun calc(it: View) {
             if (current != "") {
                 if (method == "plus") {
-                    net += current.toDouble()
+                    net += current.toInt()
                 } else if (method == "minus") {
-                    net -= current.toDouble()
+                    net -= current.toInt()
                 } else if (method == "multiply") {
-                    net *= current.toDouble()
+                    net *= current.toInt()
                 } else if (method == "divide") {
-                    net /= current.toDouble()
+                    net /= current.toInt()
                 }
             }
             result.setText(net.toString())
@@ -57,6 +78,13 @@ class MainActivity : AppCompatActivity() {
             var fullName = getResources().getResourceName(it.getId())
             var name = fullName.substring(fullName.lastIndexOf("/") + 1)
             method = name
+        }
+
+        ca.setOnClickListener {
+            net = 0
+            current = ""
+            method = "plus"
+            result.setText(net.toString())
         }
 
         plus.setOnClickListener {
@@ -114,5 +142,7 @@ class MainActivity : AppCompatActivity() {
             current += "0"
             result.setText(current)
         }
+
+
     }
 }
